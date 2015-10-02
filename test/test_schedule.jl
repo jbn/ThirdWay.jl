@@ -257,4 +257,23 @@ facts("Schedule") do
         run!(schedule_a, env)
         @fact env --> sort(times)
     end
+
+    context("cannot be merge()d with items in the past") do
+        schedule_a = Schedule()
+        schedule_a.time = 0.5
+        schedule_b = Schedule()
+        times = shuffle(float(collect(1:10)))
+
+        for t in times[1:5]
+            schedule_once!(schedule_a, t, 0) do env, _
+                push!(env, t)
+            end
+        end
+
+        schedule_once!(schedule_b, 0.0, 0) do env, _
+            push!(env, t)
+        end
+
+        @fact_throws ErrorException merge!(schedule_a, schedule_b)
+    end 
 end
