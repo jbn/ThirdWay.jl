@@ -173,6 +173,7 @@ facts("Schedule") do
 
         env_a = Vector{AbstractString}()
         run!(schedule, env_a)
+        @fact is_complete(schedule) --> true
 
         env_b = Vector{AbstractString}()
         run!(cloned_b, env_b)
@@ -226,5 +227,34 @@ facts("Schedule") do
         run!(schedule, "env")
 
         @fact schedule.steps --> 1
+    end
+
+    context("can be merge()d with another schedule") do 
+        schedule_a = Schedule()
+        schedule_b = Schedule()
+        times = shuffle(float(collect(1:10)))
+
+        for t in times[1:5]
+            schedule_once!(schedule_a, t, 0) do env, _
+                push!(env, t)
+            end
+        end
+
+        for t in times[6:10]
+            schedule_once!(schedule_b, t, 0) do env, _
+                push!(env, t)
+            end
+        end
+
+        @fact length(schedule_a) --> 5
+        @fact length(schedule_b) --> 5
+
+        merge!(schedule_a, schedule_b)
+        @fact length(schedule_a) --> 10
+
+        
+        env = Vector{Int64}()
+        run!(schedule_a, env)
+        @fact env --> sort(times)
     end
 end

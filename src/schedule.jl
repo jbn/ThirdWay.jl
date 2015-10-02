@@ -1,4 +1,5 @@
 export Schedule, step!, clear!, reset!, run!, reshuffle!
+export is_complete
 export schedule_once!, schedule_once_in!
 
 import Base.Collections: heappush!, heappop!
@@ -106,7 +107,7 @@ isempty(schedule::Schedule) = isempty(schedule.queue)
 is_complete(schedule::Schedule) = isempty(schedule)
 
 function merge!(schedule::Schedule, other::Schedule)
-    if other.queue[1].time < schedule.time
+    if other.queue[1].activate_at.time < schedule.time
         error("Merge over items already in the past.")
     end
     
