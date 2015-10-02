@@ -1,5 +1,3 @@
-import Base: +, isless
-
 immutable ActivationPoint
     time::Float64
     order::UInt16

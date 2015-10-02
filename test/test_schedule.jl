@@ -1,4 +1,4 @@
-import ThirdWay.ActivationPoint
+import ThirdWay: ActivationPoint, Event
 
 facts("ActivationPoint") do
     context("jitter is randomized") do
@@ -26,5 +26,14 @@ facts("ActivationPoint") do
         rejitters = Set([ActivationPoint(ap).jitter for _ in 1:10])
 
         @fact length(rejitters) > 1 --> true
+    end
+end
+
+facts("Event") do
+    context("uses ActivationPoint as an ordering") do
+        a = Event(ActivationPoint(5.0, 5), println)
+        b = Event(ActivationPoint(3.0, 3), println)
+
+        @fact a > b --> true
     end
 end
