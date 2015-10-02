@@ -1,5 +1,5 @@
 module ThirdWay
 
-# package code goes here
+include("activation_point.jl")
 
-end # module
+end
