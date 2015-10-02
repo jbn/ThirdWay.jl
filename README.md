@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/jbn/ThirdWay.jl.svg?branch=master)](https://travis-ci.org/jbn/ThirdWay.jl)
 [![Coverage Status](https://coveralls.io/repos/jbn/ThirdWay.jl/badge.svg?branch=master&service=github)](https://coveralls.io/github/jbn/ThirdWay.jl?branch=master)
+[![Build status](https://ci.appveyor.com/api/projects/status/5fcg64ldkmobiroi/branch/master?svg=true)](https://ci.appveyor.com/project/jbn/thirdway-jl/branch/master)
 
 `ThirdWay.jl` is a Julia package for building Agent-Based Models (ABMs).
 
