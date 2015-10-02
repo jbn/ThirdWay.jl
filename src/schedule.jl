@@ -1,4 +1,5 @@
 export Schedule, step!, clear!, reset!, run!, reshuffle!
+export schedule_once!, schedule_once_in!
 
 import Base.Collections: heappush!, heappop!
 
@@ -114,4 +115,24 @@ function merge!(schedule::Schedule, other::Schedule)
     end
 
     schedule
+end
+
+function schedule_once!(schedule::Schedule, actionable, 
+                        time::AbstractFloat=1.0, order::Integer=1) 
+    push!(schedule,  actionable, ActivationPoint(time, order))
+end
+
+function schedule_once!(f::Function, schedule::Schedule, 
+                        time::AbstractFloat=1.0, order::Integer=1) 
+    schedule_once!(schedule, f, time, order)
+end
+
+function schedule_once_in!(schedule::Schedule, actionable, 
+                           Δ::AbstractFloat=1.0, order::Integer=1) 
+    push!(schedule, actionable, ActivationPoint(schedule.time + Δ, order))
+end
+
+function schedule_once_in!(f::Function, schedule::Schedule, 
+                           Δ::AbstractFloat=1.0, order::Integer=1) 
+    schedule_once_in!(schedule, f, Δ, order)
 end

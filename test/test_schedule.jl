@@ -184,4 +184,47 @@ facts("Schedule") do
 
         @fact env_a != env_c --> true
     end
+
+    context("schedule_once!") do 
+        schedule = Schedule()
+        hit = false
+
+        schedule_once!(schedule, 10.0, 3) do env, sch
+            @fact sch.time --> 10.0
+            @fact hit --> true
+        end
+
+        schedule_once!(schedule, 10.0, 1) do env, sch
+            @fact sch.time --> 10.0
+            @fact hit --> false
+            hit = true
+        end
+
+        run!(schedule, "env")
+    end
+
+    context("schedule_once_in!") do 
+        schedule = Schedule()
+        schedule.time = 100.0
+        hit = false
+
+        
+
+        schedule_once_in!(schedule, 10.0, 3) do env, sch
+            @fact sch.time --> 110.0
+            @fact hit --> true
+            @fact schedule.steps --> 0
+        end
+
+        schedule_once_in!(schedule, 10.0, 1) do env, sch
+            @fact sch.time --> 110.0
+            @fact hit --> false
+            hit = true
+            @fact schedule.steps --> 0
+        end
+
+        run!(schedule, "env")
+
+        @fact schedule.steps --> 1
+    end
 end
