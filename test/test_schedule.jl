@@ -276,4 +276,18 @@ facts("Schedule") do
 
         @fact_throws ErrorException merge!(schedule_a, schedule_b)
     end 
+
+    context("shows a nice human readable format") do 
+        schedule = Schedule()
+        schedule.time = 100.0
+        schedule.steps = 5
+        schedule_once!(schedule, 200.0, 0) do env, _
+            # pass
+        end
+
+        buf = IOBuffer()
+        show(buf, schedule)
+        expected = "Schedule at time=100.0 and steps=5 with 1 events."
+        @fact UTF8String(buf.data) --> expected
+    end
 end
