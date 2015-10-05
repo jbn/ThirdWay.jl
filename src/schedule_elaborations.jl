@@ -48,7 +48,7 @@ function schedule_repeating!(action::Function, schedule::Schedule,
     schedule_repeating!(schedule, action, starting_at, interval, order)
 end
 
-immutable SequenceOfActions
+type SequenceOfActions
     actions
     
     function SequenceOfActions(actions::AbstractVector)
@@ -62,7 +62,7 @@ function Base.call(seq::SequenceOfActions, state, schedule::Schedule)
     end
 end
 
-immutable ShuffledActions
+type ShuffledActions
     actions
     
     function ShuffledActions(actions::AbstractVector)
