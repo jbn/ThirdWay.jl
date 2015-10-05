@@ -318,7 +318,13 @@ facts("Schedule") do
         
         @fact xs --> float(collect(0:5:45))
     end
+
+    context("repeating action has a positive interval") do 
+        @fact_throws ArgumentError RepeatingAction(-1, 0) do env, sched
+        end
+    end
 end
+
 
 facts("SequenceOfActions") do
     context("executes each actionable in the specified order") do
