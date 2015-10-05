@@ -1,4 +1,5 @@
 export RepeatingAction, stop!, schedule_repeating!
+export SequenceOfActions, ShuffledActions
 
 type RepeatingAction
     interval::Float64
@@ -45,4 +46,33 @@ end
 function schedule_repeating!(action::Function, schedule::Schedule, 
                              starting_at=1.0, interval=1.0, order=1)
     schedule_repeating!(schedule, action, starting_at, interval, order)
+end
+
+immutable SequenceOfActions
+    actions
+    
+    function SequenceOfActions(actions::AbstractVector)
+        new(Vector(actions))
+    end
+end
+
+function Base.call(seq::SequenceOfActions, state, schedule::Schedule)
+    for action in seq.actions
+        action(state, schedule)
+    end
+end
+
+immutable ShuffledActions
+    actions
+    
+    function ShuffledActions(actions::AbstractVector)
+        new(Vector(actions))
+    end
+end
+
+function Base.call(seq::ShuffledActions, state, schedule::Schedule)
+    shuffle!(seq.actions)
+    for action in seq.actions
+        action(state, schedule)
+    end
 end

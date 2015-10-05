@@ -320,3 +320,35 @@ facts("Schedule") do
     end
 end
 
+facts("SequenceOfActions") do
+    context("executes each actionable in the specified order") do
+        seq = SequenceOfActions([
+            (env, sch) -> push!(env, "a"),
+            (env, sch) -> push!(env, "b"), 
+            (env, sch) -> push!(env, "c")
+        ])
+
+        xs = String[]
+        seq(xs, Schedule())
+        @fact xs --> ["a", "b", "c"]
+    end
+end
+
+facts("ShuffledActions") do
+    context("shuffles then executes a set of actions") do 
+        seq = ShuffledActions([
+            (env, sch) -> push!(env, "a"),
+            (env, sch) -> push!(env, "b"), 
+            (env, sch) -> push!(env, "c")
+        ])
+
+        xs = String[]
+        for _ in 1:10
+            seq(xs, Schedule())
+        end
+        result = join(xs)
+        repeated_str = repeat("abc", 10)
+        @fact length(result) --> length(repeated_str)
+        @fact repeated_str != result --> true
+    end
+end
