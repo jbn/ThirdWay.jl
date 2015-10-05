@@ -21,9 +21,9 @@ RepeatingAction(action::Function, interval, order) = RepeatingAction(
 
 stop!(repeating::RepeatingAction) = repeating.interval = -1
 
-function Base.call(repeating::RepeatingAction, state, schedule::Schedule)
+function Base.call(repeating::RepeatingAction, env, schedule::Schedule)
     if repeating.interval > 0
-        repeating.actionable(state, schedule)
+        repeating.actionable(env, schedule)
         
         schedule_once_in!(
             schedule, repeating, repeating.interval, repeating.order
@@ -56,9 +56,9 @@ type SequenceOfActions
     end
 end
 
-function Base.call(seq::SequenceOfActions, state, schedule::Schedule)
+function Base.call(seq::SequenceOfActions, env, schedule::Schedule)
     for action in seq.actions
-        action(state, schedule)
+        action(env, schedule)
     end
 end
 
@@ -70,25 +70,25 @@ type ShuffledActions
     end
 end
 
-function Base.call(seq::ShuffledActions, state, schedule::Schedule)
+function Base.call(seq::ShuffledActions, env, schedule::Schedule)
     shuffle!(seq.actions)
     for action in seq.actions
-        action(state, schedule)
+        action(env, schedule)
     end
 end
 
 immutable NoAction
 end
 
-function Base.call(::NoAction, state, schedule::Schedule)
+function Base.call(::NoAction, env, schedule::Schedule)
 end
 
 type TentativeAction
     actionable
 end
 
-function Base.call(tentative::TentativeAction, state, schedule::Schedule)
-    tentative.actionable(state, schedule)
+function Base.call(tentative::TentativeAction, env, schedule::Schedule)
+    tentative.actionable(env, schedule)
 end
 
 stop!(tentative::TentativeAction) = tentative.actionable = NoAction()

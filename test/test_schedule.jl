@@ -361,7 +361,7 @@ end
 
 facts("TentativeAction") do
     context("does not execute when stop!()d") do 
-        bad_f(state, schedule) = assert(false)
+        bad_f(env, schedule) = assert(false)
         @fact_throws AssertionError bad_f([], Schedule())
 
         tentative = TentativeAction(bad_f)

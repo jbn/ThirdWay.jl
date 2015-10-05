@@ -48,7 +48,7 @@ function push!(action::Function, schedule::Schedule, at::ActivationPoint)
     push!(schedule, action, at)
 end
 
-function step!(schedule::Schedule, state)
+function step!(schedule::Schedule, env)
     (schedule.time == AFTER_SIMULATION || isempty(schedule)) && return false
     
     next_time = schedule.queue[1].activate_at.time
@@ -56,7 +56,7 @@ function step!(schedule::Schedule, state)
 
     while next_time == schedule.time
         event = heappop!(schedule.queue)
-        event.action(state, schedule)
+        event.action(env, schedule)
 
         if isempty(schedule)
             break
