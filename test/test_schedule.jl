@@ -290,4 +290,33 @@ facts("Schedule") do
         expected = "Schedule at time=100.0 and steps=5 with 1 events."
         @fact UTF8String(buf.data) --> expected
     end
+
+    context("schedule_repeating! repeats until stop()d") do
+        schedule = Schedule()
+
+        # Starting at t=0.0, repeat this action every 5.0 deltas.
+        stoppable = schedule_repeating!(schedule, 0.0, 5.0, 0) do env, sched
+            push!(env, schedule.time)
+        end
+
+        xs = Float64[]
+        for step in 1:20
+            step!(schedule, xs)
+            @fact step --> schedule.steps
+            
+            # At this point, kill the action.
+            if step == 10
+                stop!(stoppable)
+            end
+            
+            # One after the killed action, the schedule is exhausted.
+            if is_complete(schedule)
+                @fact step --> 11
+                break
+            end
+        end
+        
+        @fact xs --> float(collect(0:5:45))
+    end
 end
+

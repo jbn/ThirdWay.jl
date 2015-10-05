@@ -6,5 +6,6 @@ import Base: Callable, call
 include("activation_point.jl")
 include("event.jl")
 include("schedule.jl")
+include("schedule_elaborations.jl")
 
 end
