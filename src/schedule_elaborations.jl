@@ -1,5 +1,5 @@
 export RepeatingAction, stop!, schedule_repeating!
-export SequenceOfActions, ShuffledActions
+export SequenceOfActions, ShuffledActions, TentativeAction, NoAction
 
 type RepeatingAction
     interval::Float64
@@ -76,3 +76,20 @@ function Base.call(seq::ShuffledActions, state, schedule::Schedule)
         action(state, schedule)
     end
 end
+
+immutable NoAction
+end
+
+function Base.call(::NoAction, state, schedule::Schedule)
+end
+
+type TentativeAction
+    actionable
+end
+
+function Base.call(tentative::TentativeAction, state, schedule::Schedule)
+    tentative.actionable(state, schedule)
+end
+
+stop!(tentative::TentativeAction) = tentative.actionable = NoAction()
+

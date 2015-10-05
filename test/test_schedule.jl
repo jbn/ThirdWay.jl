@@ -358,3 +358,14 @@ facts("ShuffledActions") do
         @fact repeated_str != result --> true
     end
 end
+
+facts("TentativeAction") do
+    context("does not execute when stop!()d") do 
+        bad_f(state, schedule) = assert(false)
+        @fact_throws AssertionError bad_f([], Schedule())
+
+        tentative = TentativeAction(bad_f)
+        stop!(tentative)
+        tentative([], Schedule())
+    end
+end
