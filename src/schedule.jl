@@ -77,9 +77,15 @@ function reshuffle!(schedule::Schedule)
     ]
 end
 
-function run!(schedule, env) 
+function run!(schedule, env, n::Int64=-1) 
     isempty(schedule) && throw(ArgumentError("Schedule already exhausted"))
-    while step!(schedule, env)
+    
+    if n > 0
+        while step!(schedule, env) && schedule.steps < n
+        end
+    else
+        while step!(schedule, env)
+        end
     end
     schedule
 end

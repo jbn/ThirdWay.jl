@@ -207,9 +207,7 @@ facts("Schedule") do
     context("schedule_once_in!") do 
         schedule = Schedule()
         schedule.time = 100.0
-        hit = false
-
-        
+        hit = false  
 
         schedule_once_in!(schedule, 10.0, 3) do env, sch
             @fact sch.time --> 110.0
@@ -227,6 +225,19 @@ facts("Schedule") do
         run!(schedule, "env")
 
         @fact schedule.steps --> 1
+    end
+
+    context("can be run! a specific number of steps") do 
+        schedule = Schedule()
+
+        # 100 steps
+        for delta in 1:100
+            schedule_once_in!(schedule, Float64(delta)) do env, sch end
+        end
+
+        run!(schedule, Any[], Int64(7))
+
+        @fact schedule.steps --> 7
     end
 
     context("can be merge()d with another schedule") do 
