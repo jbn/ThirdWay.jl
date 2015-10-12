@@ -87,6 +87,19 @@ function run!(schedule, env, n::Int64=Int64(-1))
         while step!(schedule, env)
         end
     end
+
+    schedule
+end
+
+function run!(f::Function, schedule, env)
+    isempty(schedule) && throw(ArgumentError("Schedule already exhausted"))
+
+    while step!(schedule, env)
+        if f(env, schedule) == false
+            break
+        end
+    end
+
     schedule
 end
 

@@ -240,6 +240,24 @@ facts("Schedule") do
         @fact schedule.steps --> 7
     end
 
+    context("can be run! with a callback") do 
+        schedule = Schedule()
+
+        # 100 steps
+        for delta in 1:100
+            schedule_once_in!(schedule, Float64(delta)) do env, sch end
+        end
+
+        i = 1
+        run!(schedule, Any[]) do env, schedule
+            @fact schedule.steps --> i
+            i += 1
+            schedule.steps < 15
+        end
+
+        @fact schedule.steps --> 15
+    end
+
     context("can be merge()d with another schedule") do 
         schedule_a = Schedule()
         schedule_b = Schedule()
