@@ -77,7 +77,7 @@ function reshuffle!(schedule::Schedule)
     ]
 end
 
-function run!(schedule, env, n::Int64=-1) 
+function run!(schedule, env, n::Int64=Int64(-1)) 
     isempty(schedule) && throw(ArgumentError("Schedule already exhausted"))
     
     if n > 0
