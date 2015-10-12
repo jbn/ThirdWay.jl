@@ -49,7 +49,7 @@ Base.call(mc::MockCallable, env, sched::Schedule) = mc.x
 
 
 type HelloAgent
-    name::String
+    name::AbstractString
 end
 
 Base.call(agent::HelloAgent, env, sched) = push!(env, agent.name)
@@ -345,7 +345,7 @@ facts("SequenceOfActions") do
             (env, sch) -> push!(env, "c")
         ])
 
-        xs = String[]
+        xs = AbstractString[]
         seq(xs, Schedule())
         @fact xs --> ["a", "b", "c"]
     end
@@ -359,7 +359,7 @@ facts("ShuffledActions") do
             (env, sch) -> push!(env, "c")
         ])
 
-        xs = String[]
+        xs = AbstractString[]
         for _ in 1:10
             seq(xs, Schedule())
         end
