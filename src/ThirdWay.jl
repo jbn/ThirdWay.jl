@@ -7,5 +7,6 @@ include("activation_point.jl")
 include("event.jl")
 include("schedule.jl")
 include("schedule_elaborations.jl")
+include("util.jl")
 
 end
